@@ -607,7 +607,9 @@ document.addEventListener("DOMContentLoaded", () => {
   // Handle sharing an activity
   function handleShare(button, activityName, details) {
     const pageUrl = window.location.href;
-    const shareText = `Check out "${activityName}" at Mergington High School! ${details.description} Schedule: ${details.schedule}`;
+    const description = details.description || "";
+    const schedule = details.schedule || "";
+    const shareText = `Check out "${activityName}" at Mergington High School! ${description} Schedule: ${schedule}`;
 
     if (button.classList.contains("facebook")) {
       window.open(
@@ -633,6 +635,8 @@ document.addEventListener("DOMContentLoaded", () => {
           button.classList.remove("copied");
           button.textContent = "🔗";
         }, 2000);
+      }).catch(() => {
+        alert("Could not copy to clipboard. Please copy the link manually.");
       });
     }
   }
