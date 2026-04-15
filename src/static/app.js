@@ -569,6 +569,12 @@ document.addEventListener("DOMContentLoaded", () => {
         `
         }
       </div>
+      <div class="share-buttons">
+        <button class="share-button facebook" data-activity="${name}" title="Share on Facebook">f</button>
+        <button class="share-button twitter" data-activity="${name}" title="Share on X (Twitter)">𝕏</button>
+        <button class="share-button email" data-activity="${name}" title="Share via Email">✉</button>
+        <button class="share-button copy-link" data-activity="${name}" title="Copy link">🔗</button>
+      </div>
     `;
 
     // Add click handlers for delete buttons
@@ -587,7 +593,48 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     }
 
+    // Add click handlers for share buttons
+    const shareButtons = activityCard.querySelectorAll(".share-button");
+    shareButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        handleShare(button, name, details);
+      });
+    });
+
     activitiesList.appendChild(activityCard);
+  }
+
+  // Handle sharing an activity
+  function handleShare(button, activityName, details) {
+    const pageUrl = window.location.href;
+    const shareText = `Check out "${activityName}" at Mergington High School! ${details.description} Schedule: ${details.schedule}`;
+
+    if (button.classList.contains("facebook")) {
+      window.open(
+        `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(pageUrl)}&quote=${encodeURIComponent(shareText)}`,
+        "_blank",
+        "width=600,height=400"
+      );
+    } else if (button.classList.contains("twitter")) {
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(pageUrl)}`,
+        "_blank",
+        "width=600,height=400"
+      );
+    } else if (button.classList.contains("email")) {
+      const subject = `Mergington High School - ${activityName}`;
+      const body = `${shareText}\n\nLearn more: ${pageUrl}`;
+      window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    } else if (button.classList.contains("copy-link")) {
+      navigator.clipboard.writeText(`${shareText}\n${pageUrl}`).then(() => {
+        button.classList.add("copied");
+        button.textContent = "✓";
+        setTimeout(() => {
+          button.classList.remove("copied");
+          button.textContent = "🔗";
+        }, 2000);
+      });
+    }
   }
 
   // Event listeners for search and filter
