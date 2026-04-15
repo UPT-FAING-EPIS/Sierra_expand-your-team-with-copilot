@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const darkModeIcon = document.getElementById("dark-mode-icon");
   const darkModeLabel = document.getElementById("dark-mode-label");
 
-  function applyDarkMode(enabled) {
+  function setDarkMode(enabled) {
     if (enabled) {
       document.documentElement.classList.add("dark-mode");
       darkModeIcon.textContent = "☀️";
@@ -18,11 +18,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize dark mode from saved preference
   const savedDarkMode = localStorage.getItem("darkMode") === "true";
-  applyDarkMode(savedDarkMode);
+  setDarkMode(savedDarkMode);
 
   darkModeToggle.addEventListener("click", () => {
     const isDark = document.documentElement.classList.contains("dark-mode");
-    applyDarkMode(!isDark);
+    setDarkMode(!isDark);
     localStorage.setItem("darkMode", !isDark);
   });
 
